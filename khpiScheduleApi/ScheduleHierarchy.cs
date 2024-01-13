@@ -8,14 +8,18 @@ namespace khpiScheduleApi
 {
     public class ScheduleHierarchy : IScheduleHierarchy
     {
-        private ScheduleApi api;
+        private readonly ScheduleApi _api;
+
+        public ScheduleHierarchy(ScheduleApi api) 
+        {
+            _api = api;
+        }
+
         public List<AcademicGroup> GetAcademicGroups(Tuple<AcademicGroupsParameters, string>[] parameters = null)
         {
-            api = new ScheduleApi();
-
             Tuple<string, string>[]? parametersAsString = TupleEnumToTupleStringHelper.Convert(parameters);
 
-            var result = api.GetResponseAsync("hierarchy/academic-groups", parametersAsString);
+            var result = _api.GetResponseAsync("hierarchy/academic-groups", parametersAsString);
 
             JObject content = JObject.Parse(result.Content);
             IList<JToken> results = content["results"].Children().ToList();
@@ -31,9 +35,7 @@ namespace khpiScheduleApi
 
         public List<Faculty> GetFaculties(string? page = null)
         {
-            api = new ScheduleApi();
-
-            var result = api.GetResponseAsync("hierarchy/faculties", 
+            var result = _api.GetResponseAsync("hierarchy/faculties", 
                                                          page != null ? new[] { Tuple.Create("page", page) } : null);
 
             JObject content = JObject.Parse(result.Content);
@@ -50,9 +52,7 @@ namespace khpiScheduleApi
 
         public List<Profile> GetProfiles(string? page = null)
         {
-            api = new ScheduleApi();
-
-            var result = api.GetResponseAsync("hierarchy/profiles",
+            var result = _api.GetResponseAsync("hierarchy/profiles",
                                                          page != null ? new[] { Tuple.Create("page", page) } : null);
 
             JObject content = JObject.Parse(result.Content);
@@ -69,11 +69,9 @@ namespace khpiScheduleApi
 
         public List<Speciality> GetSpecialities(Tuple<SpecialitiesParameters, string>[] parameters = null)
         {
-            api = new ScheduleApi();
-
             Tuple<string, string>[]? parametersAsString = TupleEnumToTupleStringHelper.Convert(parameters);
 
-            var result = api.GetResponseAsync("hierarchy/specialities", parametersAsString);
+            var result = _api.GetResponseAsync("hierarchy/specialities", parametersAsString);
 
             JObject content = JObject.Parse(result.Content);
             IList<JToken> results = content["results"].Children().ToList();

@@ -8,14 +8,18 @@ namespace khpiScheduleApi
 {
     public class ScheduleSchedule : IScheduleSchedule
     {
-        private ScheduleApi api;
+        private readonly ScheduleApi _api;
+        
+        public ScheduleSchedule(ScheduleApi api)
+        {
+            _api = api;
+        }
+
         public List<Schedule> GetSchedules(Tuple<SchedulesParameters, string>[] parameters)
         {
-            api = new ScheduleApi();
-
             Tuple<string, string>[]? parametersAsString = TupleEnumToTupleStringHelper.Convert(parameters);
 
-            var result = api.GetResponseAsync("schedule", parametersAsString);
+            var result = _api.GetResponseAsync("schedule", parametersAsString);
 
             JObject content = JObject.Parse(result.Content);
             IList<JToken> results = content["results"].Children().ToList();
