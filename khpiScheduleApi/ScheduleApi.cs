@@ -7,7 +7,7 @@ namespace khpiScheduleApi
     {
         public RestResponse GetResponseAsync(string resource, Tuple<string, string>[] parameters = null)
         {
-            var client = new RestClient("https://schedule-api.nbikemsu.ru");
+            var client = new RestClient("https://schedule-api.khpi.ru");
 
             var request = new RestRequest(resource, Method.Get);
 
